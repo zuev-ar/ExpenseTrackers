@@ -15,6 +15,12 @@ class TransactionViewModel: ObservableObject {
     @Published var currentMonthStartDate: Date = Date()
     @Published var transactions: [Transaction] = transactionListPreviewData
     
+    var filteredTransactions: [Transaction] {
+        transactions.filter { transaction in
+            transaction.date >= startDate && transaction.date <= endDate
+        }
+    }
+    
     // MARK: Expense/Income Tab
     @Published var tabName: TransactionType = .income
     
@@ -27,7 +33,7 @@ class TransactionViewModel: ObservableObject {
     
     @Published var remark: String = ""
     @Published var amount: String = ""
-    @Published var type: TransactionType = .all
+    @Published var type: TransactionType = .income
     @Published var date: Date = Date()
     
     init() {
@@ -37,6 +43,9 @@ class TransactionViewModel: ObservableObject {
         
         startDate = calendar.date(from: components)!
         currentMonthStartDate = calendar.date(from: components)!
+        
+        let componentsOfTime = DateComponents(hour: 23, minute: 59, second: 59)
+        endDate = calendar.date(byAdding: componentsOfTime, to: calendar.startOfDay(for: Date()))!
     }
     
     // MARK: Fetching Current Month Date String
@@ -52,8 +61,19 @@ class TransactionViewModel: ObservableObject {
     
     func convertTransactionsToCurrency(type: TransactionType = .all) -> String {
         var value: Double = 0
-        value = transactions.reduce(0, { partialResult, transaction in
-            return partialResult + (transaction.type == .all ? (transaction.type == .income ? transaction.amount : -transaction.amount) : (transaction.type == type ? transaction.amount : 0))
+        value = filteredTransactions.reduce(0, { partialResult, transaction in
+            if type == .all {
+                if transaction.type == .income {
+                    return partialResult + transaction.amount
+                } else {
+                    return partialResult - transaction.amount
+                }
+            } else if transaction.type == type {
+                return partialResult + transaction.amount
+            }
+            
+            return partialResult
+//            return partialResult + (type == .all ? (transaction.type == .income ? transaction.amount : -transaction.amount) : (transaction.type == type ? transaction.amount : 0))
         })
 
         return convertNumberToPrice(value: value)
@@ -69,13 +89,21 @@ class TransactionViewModel: ObservableObject {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
 
+        let value = formatter.string(for: value)
         return formatter.string(for: value) ?? "0.00" + formatter.currencySymbol!
     }
     
+    // MARK: Currency Symbol
+    func currencySymbol() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        return formatter.currencySymbol!
+    }
+    
     // MARK: Clearing All Data
-    func clearDat() {
+    func clearData() {
         date = Date()
-        type = .all
+        type = .income
         remark = ""
         amount = ""
     }
@@ -93,7 +121,7 @@ class TransactionViewModel: ObservableObject {
         )
         transactions.append(transaction)
         transactions = transactions.sorted(by: { first, second in
-            return second.date < first.date
+            return second.date > first.date
         })
     }
 }

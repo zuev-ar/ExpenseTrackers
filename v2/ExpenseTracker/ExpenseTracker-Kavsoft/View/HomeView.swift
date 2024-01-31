@@ -56,7 +56,7 @@ struct HomeView: View {
                 .ignoresSafeArea()
         }
         .fullScreenCover(isPresented: $transactionVM.addNewExpense) {
-            transactionVM.clearDat()
+            transactionVM.clearData()
         } content: {
             TransactionNewView()
                 .environmentObject(transactionVM)

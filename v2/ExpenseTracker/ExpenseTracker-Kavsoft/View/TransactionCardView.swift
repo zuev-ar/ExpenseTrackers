@@ -23,8 +23,8 @@ struct TransactionCardView: View {
                         endPoint: .bottomTrailing)
                 )
             
-            VStack(spacing: 15) {
-                VStack(spacing: 15) {
+            VStack(spacing: 5) {
+                VStack(spacing: 5) {
                     // MARK: Currently Going Month Date String
                     Text(isFilter ? transactionVM.convertDateToString() : transactionVM.currentMonthDateString())
                         .font(.callout)
@@ -34,9 +34,10 @@ struct TransactionCardView: View {
                     Text(transactionVM.convertTransactionsToCurrency())
                         .font(.system(size: 35, weight: .bold))
                         .lineLimit(1)
-                        .padding(.bottom, 5)
+//                        .padding(.bottom, 5)
                 }
-                .offset(y: -10)
+//                .padding(.top, 5)
+//                .offset(y: -10)
                 
                 HStack(spacing: 15) {
                     Image(systemName: "arrow.down")
@@ -76,15 +77,16 @@ struct TransactionCardView: View {
                             .fixedSize()
                     }
                 }
+                .frame(height: 50)
                 .padding(.horizontal)
                 .padding(.trailing)
-                .offset(y: 15)
+//                .offset(y: 15)
             }
             .foregroundColor(.white)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
-        .frame(height: 220)
-        .padding(.top)
+        .frame(height: 150)
+//        .padding(.top)
     }
 }
 

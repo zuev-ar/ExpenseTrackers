@@ -23,34 +23,30 @@ struct TransactionNewView: View {
                 
                 // MARK: Custom TextField
                 // For Currency Sybol
-                if let symbol =
-                    transactionVM.convertNumberToPrice(value: 0).first {
-                    TextField("0", text: $transactionVM.amount)
-                        .font(.system(size: 35))
-                        .foregroundStyle(Color("Gradient2"))
-                        .multilineTextAlignment(.center)
-                        .keyboardType(.numberPad)
-                        .background {
-                            Text(transactionVM.amount == "" ? "0" : transactionVM.amount)
-                                .font(.system(size: 35))
-                                .opacity(0)
-                                .overlay(alignment: .leading) {
-                                    Text(String(symbol))
-                                        .opacity(0.5)
-                                        .offset(x: -15, y: 5)
-                                }
-                            
-                        }
-                        .padding(.vertical, 10)
-                        .frame(maxWidth: .infinity)
-                        .background {
-                            Capsule()
-                                .fill(.white)
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.top)
-                    
-                }
+                TextField("0", text: $transactionVM.amount)
+                    .font(.system(size: 35))
+                    .foregroundStyle(Color("Gradient2"))
+                    .multilineTextAlignment(.center)
+                    .keyboardType(.numberPad)
+                    .background {
+                        Text(transactionVM.amount == "" ? "0" : transactionVM.amount)
+                            .font(.system(size: 35))
+                            .opacity(0)
+                            .overlay(alignment: .leading) {
+                                Text(transactionVM.currencySymbol())
+                                    .opacity(0.5)
+                                    .offset(x: -50, y: 5)
+                                    .frame(width: 40)
+                            }
+                    }
+                    .padding(.vertical, 10)
+                    .frame(maxWidth: .infinity)
+                    .background {
+                        Capsule()
+                            .fill(.white)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top)
                 
                 // MARK: Custom Labels
                 Label {
@@ -71,19 +67,21 @@ struct TransactionNewView: View {
                 
                 Label {
                     // MARK: CheckBoxes
-                    CustomCheckBoxesView()
+//                    CustomCheckBoxesView()
+                    CustomSegmentedControl(tabName: $transactionVM.type)
+                        .padding(.top, 10)
                 } icon: {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .font(.title3)
-                        .foregroundStyle(Color("Gray"))
+//                    Image(systemName: "arrow.up.arrow.down")
+//                        .font(.title3)
+//                        .foregroundStyle(Color("Gray"))
                 }
-                .padding(.vertical, 20)
-                .padding(.horizontal, 15)
-                .background {
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(.white)
-                }
-                .padding(.top, 20)
+//                .padding(.vertical, 20)
+//                .padding(.horizontal, 15)
+//                .background {
+//                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+//                        .fill(.white)
+//                }
+//                .padding(.top, 20)
                 
                 Label {
                     DatePicker.init("",

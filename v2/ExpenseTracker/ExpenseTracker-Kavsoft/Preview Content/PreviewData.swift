@@ -31,5 +31,12 @@ var transactionListPreviewData: [Transaction] = [
         date: Date(timeIntervalSince1970: 1652987247),
         type: .expense,
         color: "Yellow"
+    ),
+    Transaction(
+        remark: "Credit",
+        amount: 500,
+        date: Date() - 3600,
+        type: .income,
+        color: "Green"
     )
 ]
